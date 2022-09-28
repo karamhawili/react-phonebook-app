@@ -52,6 +52,12 @@ const App = () => {
     });
   };
 
+  const deletePerson = (id) => {
+    personService.remove(id).then(() => {
+      setPersons(persons.filter((p) => p.id !== id));
+    });
+  };
+
   const nameAlreadyExists = (personName, existingPersons) => {
     return !!existingPersons.find((n) => n.name === personName);
   };
@@ -77,7 +83,10 @@ const App = () => {
         onSubmitForm={addPerson}
       />
       <h2>Numbers</h2>
-      <Persons personsInfo={query ? getFilteredPersons() : persons} />
+      <Persons
+        personsInfo={query ? getFilteredPersons() : persons}
+        deletePerson={deletePerson}
+      />
     </div>
   );
 };
