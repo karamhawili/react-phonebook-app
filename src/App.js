@@ -1,4 +1,3 @@
-import axios from 'axios';
 import React, { useEffect, useState } from 'react';
 import Filter from './components/Filter';
 import PersonForm from './components/PersonForm';
@@ -33,10 +32,21 @@ const App = () => {
   const addPerson = (event) => {
     event.preventDefault();
 
-    if (nameAlreadyExists(newName, persons)) {
-      alert(`${newName} already exists in phonebook`);
-      setNewName('');
-      setNewNumber('');
+    const existingPerson = persons.find((p) => p.name === newName);
+
+    if (existingPerson) {
+      const updatedPerson = { ...existingPerson, number: newNumber };
+      personService
+        .update(updatedPerson, existingPerson.id)
+        .then((returnedPerson) => {
+          setNewName('');
+          setNewNumber('');
+          setPersons(
+            persons.map((p) =>
+              p.id !== returnedPerson.id ? p : returnedPerson
+            )
+          );
+        });
       return;
     }
 
