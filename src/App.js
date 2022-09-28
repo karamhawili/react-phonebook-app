@@ -44,9 +44,12 @@ const App = () => {
       name: newName,
       number: newNumber,
     };
-    setPersons(persons.concat(personObject));
-    setNewName('');
-    setNewNumber('');
+
+    personService.create(personObject).then((returnedPerson) => {
+      setPersons(persons.concat(returnedPerson));
+      setNewName('');
+      setNewNumber('');
+    });
   };
 
   const nameAlreadyExists = (personName, existingPersons) => {
