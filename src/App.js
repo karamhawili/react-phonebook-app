@@ -3,8 +3,7 @@ import React, { useEffect, useState } from 'react';
 import Filter from './components/Filter';
 import PersonForm from './components/PersonForm';
 import Persons from './components/Persons';
-
-//Phonebook, 2.6 - 2.11, FSO
+import personService from './services/persons';
 
 const App = () => {
   const [persons, setPersons] = useState([]);
@@ -13,9 +12,9 @@ const App = () => {
   const [query, setQuery] = useState('');
 
   useEffect(() => {
-    axios.get('http://localhost:3002/persons').then((response) => {
+    personService.getAll().then((returnedPersons) => {
       console.log('promise fulfilled');
-      setPersons(response.data);
+      setPersons(returnedPersons);
     });
   }, []);
 
