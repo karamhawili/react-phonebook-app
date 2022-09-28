@@ -63,13 +63,11 @@ const App = () => {
   };
 
   const deletePerson = (id) => {
-    personService.remove(id).then(() => {
-      setPersons(persons.filter((p) => p.id !== id));
-    });
-  };
-
-  const nameAlreadyExists = (personName, existingPersons) => {
-    return !!existingPersons.find((n) => n.name === personName);
+    if (window.confirm('Are you sure you want to delete this person?')) {
+      personService.remove(id).then(() => {
+        setPersons(persons.filter((p) => p.id !== id));
+      });
+    }
   };
 
   const getFilteredPersons = () => {
