@@ -35,6 +35,12 @@ const App = () => {
     const existingPerson = persons.find((p) => p.name === newName);
 
     if (existingPerson) {
+      const confirmUpdate = window.confirm(
+        `${existingPerson.name} is already in your phonebook. Replace the old number with the new one?`
+      );
+
+      if (!confirmUpdate) return;
+
       const updatedPerson = { ...existingPerson, number: newNumber };
       personService
         .update(updatedPerson, existingPerson.id)
