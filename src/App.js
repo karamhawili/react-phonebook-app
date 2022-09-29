@@ -9,6 +9,8 @@ const App = () => {
   const [newName, setNewName] = useState('');
   const [newNumber, setNewNumber] = useState('');
   const [query, setQuery] = useState('');
+  const [notificationMessage, setNotificationMessage] = useState(null);
+  const [notificationType, setNotificationType] = useState(null);
 
   useEffect(() => {
     personService.getAll().then((returnedPersons) => {
@@ -52,6 +54,17 @@ const App = () => {
               p.id !== returnedPerson.id ? p : returnedPerson
             )
           );
+          showNotification(
+            `Updated ${returnedPerson.name}'s number`,
+            'success'
+          );
+        })
+        .catch((error) => {
+          showNotification(
+            `${existingPerson.name} has been removed from the server`,
+            'error'
+          );
+          setPersons(persons.filter((p) => p.id !== existingPerson.id));
         });
       return;
     }
@@ -65,6 +78,7 @@ const App = () => {
       setPersons(persons.concat(returnedPerson));
       setNewName('');
       setNewNumber('');
+      showNotification(`Added ${returnedPerson.name} to phonebook`, 'success');
     });
   };
 
@@ -84,6 +98,14 @@ const App = () => {
     return filteredPersons;
   };
 
+  const showNotification = (message, type) => {
+    setNotificationMessage(message);
+    setNotificationType(type);
+    setTimeout(() => {
+      setNotificationMessage(null);
+      setNotificationType(null);
+    }, 5000);
+  };
   return (
     <div>
       <h1>Phonebook</h1>
@@ -95,6 +117,8 @@ const App = () => {
         handleNameChange={handleNameChange}
         handleNumberChange={handleNumberChange}
         onSubmitForm={addPerson}
+        notificationMessage={notificationMessage}
+        notificationType={notificationType}
       />
       <h2>Numbers</h2>
       <Persons
